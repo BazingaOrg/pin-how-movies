@@ -1,26 +1,44 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Loader2, Search } from "lucide-react"
+import { Loader2, Search, X } from "lucide-react"
 
-export function MovieSearch() {
-  const [input, setInput] = useState("")
+interface MovieSearchProps {
+  onSearch: (titles: string) => void
+  initialValue?: string
+}
+
+export function MovieSearch({ onSearch, initialValue = "" }: MovieSearchProps) {
+  const [input, setInput] = useState(initialValue)
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // 当 initialValue 变化时更新 input
+  useEffect(() => {
+    if (initialValue !== input) {
+      setInput(initialValue)
+    }
+  }, [initialValue])
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
 
     setIsLoading(true)
-    const encodedTitles = encodeURIComponent(input)
-    router.push(`/?titles=${encodedTitles}`)
+    await onSearch(input)
     setIsLoading(false)
-  }
+  }, [input, onSearch])
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value)
+  }, [])
+
+  const handleClear = useCallback(() => {
+    setInput("")
+    onSearch("")
+  }, [onSearch])
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-12">
@@ -33,11 +51,21 @@ export function MovieSearch() {
             <Input
               id="movie-titles"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleInputChange}
               placeholder="输入中文电影标题，用逗号分隔"
-              className="bg-netflix-black border-netflix-light-gray text-white placeholder:text-gray-500 pl-10 h-12"
+              className="bg-netflix-black border-netflix-light-gray text-white placeholder:text-gray-500 pl-10 pr-10 h-12"
             />
             <Search className="absolute left-3 top-3 h-5 w-5 text-gray-500" />
+            {input.trim() && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="absolute right-3 top-3 text-gray-500 hover:text-white transition-colors focus:outline-none"
+                aria-label="清除搜索内容"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            )}
           </div>
           <Button
             type="submit"

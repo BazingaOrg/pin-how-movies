@@ -24,33 +24,30 @@ body {
 }
 
 @layer components {
+
   /* Poster Wall Container - Relative positioning context */
   .poster-wall-container {
     @apply relative w-full mx-auto;
-    height: 1200px; /* Fixed height container */
-    max-width: 1400px; /* Limit maximum width */
-    padding: 40px; /* Add padding to prevent posters from touching edges */
-    overflow: hidden; /* Hide any overflow */
+    max-width: 1400px;
+    /* Limit maximum width */
   }
 
   /* Poster Wall - The actual container for all posters */
   .poster-wall {
-    @apply relative w-full h-full;
+    @apply grid gap-6;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 
-  /* Individual poster item - Absolutely positioned */
+  /* Individual poster item */
   .poster-item {
-    @apply absolute transition-all duration-300;
-    width: 160px; /* Fixed width for each poster */
+    @apply relative transition-all duration-300;
     transform-origin: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, z-index 0s 0.3s;
   }
 
   .poster-item:hover {
-    transform: scale(1.1) rotate(0deg) !important;
+    transform: scale(1.1) !important;
     z-index: 50 !important;
-    transition: transform 0.3s ease, z-index 0s;
   }
 
   /* Poster card - The actual card with image and details */
@@ -64,8 +61,7 @@ body {
   }
 
   .poster-card.hovered {
-    /* Removed border-color change */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); /* Enhanced shadow instead */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
   }
 
   /* Poster image container */
@@ -80,8 +76,7 @@ body {
 
   /* Skeleton for loading state */
   .poster-skeleton {
-    @apply absolute rounded-lg overflow-hidden;
-    width: 160px;
+    @apply relative rounded-lg overflow-hidden;
     aspect-ratio: 2 / 3;
     border: 4px solid #141414;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -89,42 +84,23 @@ body {
 
   /* Responsive adjustments */
   @media (max-width: 640px) {
-    .poster-wall-container {
-      height: 1600px; /* Taller container for mobile */
-      padding: 20px; /* Smaller padding on mobile */
-    }
 
-    .poster-item,
-    .poster-skeleton {
-      width: 120px; /* Smaller posters on mobile */
+    .poster-wall {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 4;
     }
   }
 
   @media (min-width: 768px) and (max-width: 1023px) {
-    .poster-wall-container {
-      height: 1400px; /* Medium height for tablets */
-    }
-
-    .poster-item,
-    .poster-skeleton {
-      width: 140px; /* Medium size posters for tablets */
-    }
-  }
-
-  @media (min-width: 1024px) and (max-width: 1279px) {
-    .poster-wall-container {
-      height: 1200px;
+    .poster-wall {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 5;
     }
   }
 
   @media (min-width: 1280px) {
-    .poster-wall-container {
-      height: 1000px; /* Shorter container for large screens */
-    }
-
-    .poster-item,
-    .poster-skeleton {
-      width: 180px; /* Larger posters on big screens */
+    .poster-wall {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
   }
 }
@@ -152,6 +128,7 @@ body {
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -179,6 +156,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

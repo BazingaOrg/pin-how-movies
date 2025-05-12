@@ -1,107 +1,119 @@
-"use client"
+'use client'
 
-import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import { MoviePoster } from "@/components/movie-poster"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
-import type { Movie } from "@/lib/types"
+import { useState, useCallback } from 'react'
+import { MoviePoster } from '@/components/movie-poster'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle } from 'lucide-react'
+import type { Movie } from '@/lib/types'
+import { PrintPostersButton } from '@/components/print-posters-button'
+import { PosterPreviewDialog } from '@/components/poster-preview-dialog'
 
-export function MovieResults() {
-  const searchParams = useSearchParams()
-  const titles = searchParams.get("titles")
+interface MovieResultsProps {
+    movies: Movie[]
+    loading: boolean
+    error: string | null
+    hasSearched?: boolean
+}
 
-  const [movies, setMovies] = useState<Movie[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export function MovieResults({ movies, loading, error, hasSearched }: MovieResultsProps) {
+    const [previewOpen, setPreviewOpen] = useState(false)
+    const [currentMovie, setCurrentMovie] = useState<Movie | null>(null)
 
-  useEffect(() => {
-    async function fetchMovies() {
-      if (!titles) return
+    const handlePosterClick = useCallback((movie: Movie) => {
+        setCurrentMovie(movie)
+        setPreviewOpen(true)
+    }, [])
 
-      setLoading(true)
-      setError(null)
+    const handleNavigate = useCallback((direction: 'prev' | 'next') => {
+        if (!currentMovie) return
 
-      try {
-        const movieTitles = titles
-          .split(",")
-          .map((title) => title.trim())
-          .filter(Boolean)
-
-        // Call our API route
-        const response = await fetch(`/api/movies?titles=${encodeURIComponent(titles)}`)
-
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`)
+        const currentIndex = movies.findIndex(m => m.id === currentMovie.id)
+        if (direction === 'prev' && currentIndex > 0) {
+            setCurrentMovie(movies[currentIndex - 1])
+        } else if (direction === 'next' && currentIndex < movies.length - 1) {
+            setCurrentMovie(movies[currentIndex + 1])
         }
+    }, [currentMovie, movies])
 
-        const results = await response.json()
-        setMovies(results)
-      } catch (err) {
-        console.error("Error fetching movies:", err)
-        setError("获取电影海报失败。请重试。")
-      } finally {
-        setLoading(false)
-      }
+    if (loading) {
+        const movieCount = Math.min(12, movies.length > 0 ? movies.length : 1)
+
+        return (
+            <div className="space-y-4">
+                <div className="flex items-center justify-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-netflix-dark-gray/50">
+                        <div className="w-5 h-5 border-2 border-netflix-red border-t-transparent rounded-full animate-spin" />
+                        <span className="text-sm text-gray-300">
+                            正在获取电影海报...
+                        </span>
+                    </div>
+                </div>
+                <div className="poster-wall-container">
+                    <div className="poster-wall">
+                        {Array.from({ length: movieCount }).map((_, i) => (
+                            <div key={i} className="poster-skeleton animate-pulse">
+                                <Skeleton className="w-full h-full rounded-lg bg-netflix-dark-gray/50" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
     }
 
-    fetchMovies()
-  }, [titles])
-
-  if (!titles) {
-    return null
-  }
-
-  if (loading) {
-    return (
-      <div className="poster-wall-container">
-        <div className="poster-wall">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div
-              key={i}
-              className="poster-skeleton"
-              style={{
-                left: `${20 + i * 15}%`,
-                top: `${10 + i * 10}%`,
-                zIndex: 10 - i,
-              }}
+    if (error) {
+        return (
+            <Alert
+                variant="destructive"
+                className="bg-netflix-dark-gray border-netflix-red"
             >
-              <Skeleton className="w-full h-full rounded-lg bg-netflix-dark-gray" />
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>错误</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+            </Alert>
+        )
+    }
+
+    if (movies.length === 0 && hasSearched) {
+        return (
+            <Alert className="bg-netflix-dark-gray border-netflix-light-gray text-white">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle className="text-white">未找到结果</AlertTitle>
+                <AlertDescription className="text-gray-300">
+                    我们找不到与您搜索匹配的电影。请尝试不同的标题。
+                </AlertDescription>
+            </Alert>
+        )
+    }
+
+    if (movies.length === 0) {
+        return null
+    }
+
+    return (
+        <>
+            <div className="poster-wall-container">
+                <div className="poster-wall">
+                    {movies.map((movie, index) => (
+                        <MoviePoster
+                            key={movie.id}
+                            movie={movie}
+                            index={index}
+                            totalCount={movies.length}
+                            onPosterClick={handlePosterClick}
+                        />
+                    ))}
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
+            <PrintPostersButton movies={movies} />
+            <PosterPreviewDialog
+                open={previewOpen}
+                onOpenChange={setPreviewOpen}
+                currentMovie={currentMovie}
+                movies={movies}
+                onNavigate={handleNavigate}
+            />
+        </>
     )
-  }
-
-  if (error) {
-    return (
-      <Alert variant="destructive" className="bg-netflix-dark-gray border-netflix-red">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>错误</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
-      </Alert>
-    )
-  }
-
-  if (movies.length === 0 && !loading) {
-    return (
-      <Alert className="bg-netflix-dark-gray border-netflix-light-gray">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>未找到结果</AlertTitle>
-        <AlertDescription>我们找不到与您搜索匹配的电影。请尝试不同的标题。</AlertDescription>
-      </Alert>
-    )
-  }
-
-  return (
-    <div className="poster-wall-container">
-      <div className="poster-wall">
-        {movies.map((movie, index) => (
-          <MoviePoster key={movie.id} movie={movie} index={index} totalCount={movies.length} />
-        ))}
-      </div>
-    </div>
-  )
 }
