@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
 import type { Movie } from '@/lib/types'
 import { PrintPostersButton } from '@/components/print-posters-button'
-import { PosterPreviewDialog } from '@/components/poster-preview-dialog'
+import { PosterPreview } from '@/components/poster-preview-dialog'
 
 interface MovieResultsProps {
     movies: Movie[]
@@ -16,7 +16,12 @@ interface MovieResultsProps {
     hasSearched?: boolean
 }
 
-export function MovieResults({ movies, loading, error, hasSearched }: MovieResultsProps) {
+export function MovieResults({
+    movies,
+    loading,
+    error,
+    hasSearched,
+}: MovieResultsProps) {
     const [previewOpen, setPreviewOpen] = useState(false)
     const [currentMovie, setCurrentMovie] = useState<Movie | null>(null)
 
@@ -25,16 +30,24 @@ export function MovieResults({ movies, loading, error, hasSearched }: MovieResul
         setPreviewOpen(true)
     }, [])
 
-    const handleNavigate = useCallback((direction: 'prev' | 'next') => {
-        if (!currentMovie) return
+    const handleNavigate = useCallback(
+        (direction: 'prev' | 'next') => {
+            if (!currentMovie) return
 
-        const currentIndex = movies.findIndex(m => m.id === currentMovie.id)
-        if (direction === 'prev' && currentIndex > 0) {
-            setCurrentMovie(movies[currentIndex - 1])
-        } else if (direction === 'next' && currentIndex < movies.length - 1) {
-            setCurrentMovie(movies[currentIndex + 1])
-        }
-    }, [currentMovie, movies])
+            const currentIndex = movies.findIndex(
+                (m) => m.id === currentMovie.id
+            )
+            if (direction === 'prev' && currentIndex > 0) {
+                setCurrentMovie(movies[currentIndex - 1])
+            } else if (
+                direction === 'next' &&
+                currentIndex < movies.length - 1
+            ) {
+                setCurrentMovie(movies[currentIndex + 1])
+            }
+        },
+        [currentMovie, movies]
+    )
 
     if (loading) {
         const movieCount = Math.min(12, movies.length > 0 ? movies.length : 1)
@@ -52,7 +65,10 @@ export function MovieResults({ movies, loading, error, hasSearched }: MovieResul
                 <div className="poster-wall-container">
                     <div className="poster-wall">
                         {Array.from({ length: movieCount }).map((_, i) => (
-                            <div key={i} className="poster-skeleton animate-pulse">
+                            <div
+                                key={i}
+                                className="poster-skeleton animate-pulse"
+                            >
                                 <Skeleton className="w-full h-full rounded-lg bg-netflix-dark-gray/50" />
                             </div>
                         ))}
@@ -107,9 +123,9 @@ export function MovieResults({ movies, loading, error, hasSearched }: MovieResul
                 </div>
             </div>
             <PrintPostersButton movies={movies} />
-            <PosterPreviewDialog
-                open={previewOpen}
-                onOpenChange={setPreviewOpen}
+            <PosterPreview
+                visible={previewOpen}
+                onVisibleChange={setPreviewOpen}
                 currentMovie={currentMovie}
                 movies={movies}
                 onNavigate={handleNavigate}

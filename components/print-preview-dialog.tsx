@@ -31,7 +31,7 @@ export function PrintPreviewDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] h-[90vh] flex flex-col p-0 gap-0 bg-zinc-100">
+            <DialogContent className="max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] h-[90vh] flex flex-col p-0 gap-0 bg-zinc-100/95 backdrop-blur-md">
                 <DialogHeader className="flex items-center justify-between px-6 py-4 border-b bg-white">
                     <div>
                         <DialogTitle className="text-xl font-semibold text-zinc-900">
