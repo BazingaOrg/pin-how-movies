@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Star, X } from 'lucide-react'
 import type { Movie } from '@/lib/types'
 import { useCallback, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -83,8 +83,8 @@ export function PosterPreview({
     const posterUrl = currentMovie.best_poster_path
         ? currentMovie.best_poster_path.full
         : currentMovie.poster_path
-        ? `https://image.tmdb.org/t/p/original${currentMovie.poster_path}`
-        : '/placeholder.svg'
+            ? `https://image.tmdb.org/t/p/original${currentMovie.poster_path}`
+            : '/placeholder.svg'
 
     // 格式化上映日期
     const formatDate = (dateStr: string) => {
@@ -103,20 +103,21 @@ export function PosterPreview({
         return `${hours}小时${remainingMinutes}分钟`
     }
 
-    // 处理点击事件
-    const handleBackdropClick = (e: React.MouseEvent) => {
-        // 确保点击的是背景层而不是内容
-        if (e.target === e.currentTarget) {
-            onVisibleChange(false)
-        }
-    }
-
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/60"
-            onClick={handleBackdropClick}
         >
             <div className="relative w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] h-[90vh] flex flex-col">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onVisibleChange(false)}
+                    className="absolute -right-2 -top-2 z-50 h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 hover:scale-110 transition-all duration-200 shadow-lg"
+                >
+                    <X className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10" />
+                    <span className="sr-only">关闭预览</span>
+                </Button>
+
                 <h1 className="sr-only">{currentMovie.title} 电影海报</h1>
                 <p className="sr-only">
                     {currentMovie.title}{' '}
