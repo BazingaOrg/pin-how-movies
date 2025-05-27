@@ -25,7 +25,6 @@ export function PrintPostersButton({ posters = [] }: PrintPostersButtonProps) {
             const ctx = canvas.getContext('2d')
             if (!ctx) throw new Error('无法创建 canvas 上下文')
 
-            // 计算画布大小
             const POSTER_WIDTH = 500
             const POSTER_HEIGHT = 750
             const COLUMNS = Math.min(5, Math.ceil(Math.sqrt(posters.length)))
@@ -34,7 +33,6 @@ export function PrintPostersButton({ posters = [] }: PrintPostersButtonProps) {
             canvas.width = POSTER_WIDTH * COLUMNS
             canvas.height = POSTER_HEIGHT * ROWS
 
-            // 绘制海报
             for (let i = 0; i < posters.length; i++) {
                 const poster = posters[i]
                 const row = Math.floor(i / COLUMNS)
@@ -58,7 +56,6 @@ export function PrintPostersButton({ posters = [] }: PrintPostersButtonProps) {
                 )
             }
 
-            // 转换为 base64
             const dataUrl = canvas.toDataURL('image/png')
             setPreviewUrl(dataUrl)
             setShowPreview(true)

@@ -168,11 +168,39 @@ body {
   }
 
   .vision-dialog-content {
-    @apply relative w-[95vw] max-w-6xl mx-auto
+    @apply relative mx-auto
     rounded-3xl overflow-hidden
     bg-white/10 backdrop-blur-2xl
     border border-white/20
     shadow-2xl;
+    
+    /* 自适应宽高 */
+    width: clamp(320px, 95vw, 1400px);
+    height: clamp(400px, 95vh, 900px);
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+
+  /* 针对长图片的特殊处理 */
+  .vision-dialog-content.long-image {
+    width: clamp(320px, 90vw, 800px);
+    height: clamp(500px, 98vh, none);
+  }
+
+  /* 响应式调整 */
+  @media (max-width: 640px) {
+    .vision-dialog-content {
+      width: 98vw;
+      height: 95vh;
+      border-radius: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .vision-dialog-content {
+      width: clamp(600px, 85vw, 1400px);
+      height: clamp(500px, 90vh, 900px);
+    }
   }
 }
 
