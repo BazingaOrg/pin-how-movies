@@ -42,10 +42,7 @@ export function MovieSearch({ onSearch, initialValue = "" }: MovieSearchProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-12">
-      <div className="bg-netflix-dark-gray rounded-md border border-netflix-light-gray p-6 shadow-2xl">
-        <label htmlFor="movie-titles" className="block text-sm font-medium mb-2 text-gray-300">
-          电影标题 (逗号分隔)
-        </label>
+      <div className="rounded-md border p-6">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Input
@@ -82,7 +79,6 @@ export function MovieSearch({ onSearch, initialValue = "" }: MovieSearchProps) {
             )}
           </Button>
         </div>
-        <p className="text-xs text-gray-500 mt-2">示例: 英雄, 卧虎藏龙, 红高粱</p>
       </div>
     </form>
   )

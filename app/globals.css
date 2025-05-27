@@ -9,6 +9,14 @@
   --netflix-black: 20, 20, 20;
   --netflix-dark-gray: 35, 35, 35;
   --netflix-light-gray: 51, 51, 51;
+  --vision-bg: linear-gradient(to bottom, #000000, #141414);
+  --vision-card: rgba(255, 255, 255, 0.08);
+  --vision-border: rgba(255, 255, 255, 0.1);
+  --vision-hover: rgba(255, 255, 255, 0.15);
+  --vision-text: rgba(255, 255, 255, 0.9);
+  --vision-text-secondary: rgba(255, 255, 255, 0.6);
+  --vision-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --vision-glow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -103,6 +111,69 @@ body {
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
   }
+
+  .vision-card {
+    @apply rounded-2xl backdrop-blur-2xl border border-white/10;
+    background: var(--vision-card);
+    box-shadow: var(--vision-shadow);
+  }
+
+  .vision-button {
+    @apply px-6 py-3 rounded-full backdrop-blur-xl transition-all duration-300
+    border border-white/10 hover:border-white/20
+    bg-white/5 hover:bg-white/10
+    text-white/90 hover:text-white
+    shadow-lg hover:shadow-xl
+    active:scale-95;
+  }
+
+  .vision-input {
+    @apply w-full px-6 py-4 rounded-full
+    bg-white/5 backdrop-blur-xl
+    border border-white/10 hover:border-white/20 focus:border-white/30
+    text-white/90 placeholder:text-white/40
+    outline-none ring-0
+    transition-all duration-300;
+  }
+
+  .vision-icon-button {
+    @apply p-2 rounded-full
+    bg-white/5 hover:bg-white/10
+    border border-white/10 hover:border-white/20
+    transition-all duration-300
+    active:scale-95;
+  }
+
+  .poster-wall {
+    @apply grid gap-6 md:gap-8;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .poster-card {
+    @apply relative aspect-[2/3] overflow-hidden rounded-2xl
+    bg-white/5 backdrop-blur-xl
+    border border-white/10 hover:border-white/20
+    transition-all duration-300
+    hover:scale-105 hover:shadow-2xl;
+  }
+
+  .poster-image {
+    @apply absolute inset-0 w-full h-full object-cover;
+  }
+
+  .vision-dialog {
+    @apply fixed inset-0 z-50
+    bg-black/20 backdrop-blur-xl
+    flex items-center justify-center;
+  }
+
+  .vision-dialog-content {
+    @apply relative w-[95vw] max-w-6xl mx-auto
+    rounded-3xl overflow-hidden
+    bg-white/10 backdrop-blur-2xl
+    border border-white/20
+    shadow-2xl;
+  }
 }
 
 @layer base {
@@ -150,6 +221,12 @@ body {
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
+
+  body {
+    @apply bg-black text-white antialiased;
+    background-image: var(--vision-bg);
+    min-height: 100vh;
+  }
 }
 
 @layer base {
@@ -160,4 +237,18 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* 添加一些动画效果 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
 }

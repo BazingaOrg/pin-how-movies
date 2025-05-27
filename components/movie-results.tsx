@@ -122,7 +122,12 @@ export function MovieResults({
                     ))}
                 </div>
             </div>
-            <PrintPostersButton movies={movies} />
+            <PrintPostersButton
+                posters={movies.map(movie => ({
+                    id: movie.id,
+                    posterPath: movie.poster_path
+                }))}
+            />
             <PosterPreview
                 visible={previewOpen}
                 onVisibleChange={setPreviewOpen}

@@ -102,9 +102,9 @@ export default function Home() {
         <div className="min-h-screen bg-gradient-to-b from-netflix-black to-black text-white">
             <div className="container mx-auto px-4 py-12">
                 <div className="flex flex-col items-center mb-12">
-                    <h1 className="text-4xl md:text-6xl font-bold text-center mb-2">
+                    {/* <h1 className="text-4xl md:text-6xl font-bold text-center mb-2">
                         拼好影
-                    </h1>
+                    </h1> */}
                 </div>
 
                 <div className="max-w-7xl mx-auto">
