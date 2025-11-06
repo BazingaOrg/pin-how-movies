@@ -1,6 +1,7 @@
 "use client";
 
 import { TMDBMovie, tmdbClient } from "@/lib/tmdb-client";
+import { messages } from "@/lib/messages";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
@@ -16,12 +17,12 @@ export function MovieList({ movies, isLoading, error, apiKeyValid }: MovieListPr
   if (apiKeyValid === false) {
     return (
       <MovieListError>
-        <p className="error-message">TMDB API key is invalid.</p>
+        <p className="error-message">{messages.apiKeyInvalid}</p>
         <p className="error-hint">
-          Verify the <code>NEXT_PUBLIC_TMDB_API_KEY</code> value in your <code>.env.local</code> file.
+          {messages.apiKeyHelp} 请在 <code>.env.local</code> 中更新 <code>NEXT_PUBLIC_TMDB_API_KEY</code>。
         </p>
         <p className="error-hint">
-          Reference: <a href="/TMDB_SETUP.md" target="_blank" className="error-link">TMDB setup guide</a>
+          参考：<a href="/TMDB_SETUP.md" target="_blank" className="error-link">{messages.tmdbGuideLabel}</a>
         </p>
       </MovieListError>
     );
@@ -125,7 +126,7 @@ function MovieItem({ movie }: MovieItemProps) {
             </div>
 
             <div className="movie_meta">
-              <span className="minutes">评分: {movie.vote_average.toFixed(1)}/10</span>
+              <span className="minutes">评分：{movie.vote_average.toFixed(1)}/10</span>
               <span className="type">电影</span>
             </div>
           </div>
@@ -133,7 +134,7 @@ function MovieItem({ movie }: MovieItemProps) {
 
         <div className="movie_desc">
           <p className="text">
-            {movie.overview || 'No overview available'}
+            {movie.overview || messages.noOverview}
           </p>
         </div>
       </div>
@@ -173,7 +174,7 @@ function MovieListSkeleton({ count }: { count?: number }) {
           </div>
         </div>
       ))}
-      <p className="loading-text">Loading search results...</p>
+      <p className="loading-text">{messages.loadingResults}</p>
     </section>
   );
 }
@@ -182,8 +183,8 @@ function MovieListEmpty() {
   return (
     <section aria-live="polite" className="movie-list-empty" role="status">
       <div className="empty-icon">🎬</div>
-      <p className="empty-text">No movies found</p>
-      <p className="empty-hint">Try searching with different keywords</p>
+      <p className="empty-text">{messages.noMoviesFound}</p>
+      <p className="empty-hint">{messages.tryDifferentKeywords}</p>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { getApiKeyStatus, tmdbClient, TMDBMovie, validateApiKey } from '@/lib/tmdb-client';
+import { messages } from '@/lib/messages';
 
 interface UseTmdbSearchResult {
   movies: TMDBMovie[];
@@ -11,8 +12,9 @@ interface UseTmdbSearchResult {
   reset: () => void;
 }
 
-const API_KEY_ERROR_MESSAGE = 'TMDB API key is invalid. Please verify your configuration.';
+const API_KEY_ERROR_MESSAGE = messages.apiKeyInvalid;
 const ABORT_ERROR_NAME = 'AbortError';
+const SEARCH_ERROR_MESSAGE = messages.searchFailed;
 
 export function useTmdbSearch(): UseTmdbSearchResult {
   const [movies, setMovies] = useState<TMDBMovie[]>([]);
@@ -123,11 +125,7 @@ export function useTmdbSearch(): UseTmdbSearchResult {
         }
 
         setMovies([]);
-        setError(
-          searchError instanceof Error
-            ? searchError.message
-            : 'TMDB search failed. Please try again later.'
-        );
+        setError(searchError instanceof Error ? searchError.message : SEARCH_ERROR_MESSAGE);
       } finally {
         if (requestIdRef.current === currentRequestId) {
           setIsLoading(false);
