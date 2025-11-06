@@ -1,5 +1,5 @@
 export const messages = {
-  searchPlaceholder: '搜索电影、演员或导演…',
+  searchPlaceholder: '输入想搜索的电影',
   apiKeyInvalid: 'TMDB API Key 配置无效，请检查设置。',
   apiKeyHelp: '请确认 TMDB API Key 配置是否正确。',
   tmdbGuideLabel: 'TMDB 配置指南',
