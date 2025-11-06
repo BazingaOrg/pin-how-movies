@@ -9,12 +9,8 @@ export const messages = {
   noOverview: '暂无简介',
   searchFailed: 'TMDB 搜索失败，请稍后重试。',
   placeholderLines: [
-    '今晚的灵感，',
-    '就从这里启程，',
     '每一次回车，',
-    '都是一场新的放映。'
+    '都是一场新的电影之旅。'
   ],
-  placeholderSubtitle: '从大片到冷门佳作，输入关键词即可发现属于你的片单',
-  placeholderHint: '支持中文搜索，按下回车即可开始',
-  placeholderBadge: '🍿 今日片单灵感'
+  placeholderHint: '按下回车即可搜索',
 } as const;

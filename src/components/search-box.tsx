@@ -98,7 +98,6 @@ function SearchPlaceholder() {
         <div aria-hidden className="search-placeholder__noise" />
         <div aria-hidden className="search-placeholder__vignette" />
         <div className="search-placeholder__content">
-          <div className="search-placeholder__badge">{messages.placeholderBadge}</div>
           <h2 className="search-placeholder__title">
             {lines.map((line, index) => {
               const isFirst = index === 0;
@@ -115,7 +114,6 @@ function SearchPlaceholder() {
               );
             })}
           </h2>
-          <p className="search-placeholder__subtitle">{messages.placeholderSubtitle}</p>
           <p className="search-placeholder__hint">{messages.placeholderHint}</p>
         </div>
       </div>
