@@ -76,11 +76,11 @@
 
 @keyframes move-background {
   from {
-    background-position: 0 0;
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    background-position: -1000px 0;
+    transform: translate3d(-1000px, 0, 0);
   }
 }
 
@@ -106,7 +106,7 @@
   .background-container .stars {
     position: absolute;
     inset: 0;
-    background: #000 url('/background/stars.png') repeat;
+    background: #000 url('/background/stars.webp') repeat;
     z-index: 0;
   }
 
@@ -118,11 +118,12 @@
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: transparent url('/background/twinkling.png') repeat;
+    background: transparent url('/background/twinkling.webp') repeat;
     background-size: 1000px 1000px;
     z-index: 2;
     animation: move-background 70s linear infinite;
     opacity: 0.65;
+    will-change: transform; /* 提示浏览器使用GPU加速 */
   }
 
   .background-container .clouds {
@@ -133,11 +134,12 @@
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: transparent url('/background/clouds_repeat.png') repeat;
+    background: transparent url('/background/clouds_repeat.webp') repeat;
     background-size: 1000px 1000px;
     z-index: 3;
     animation: move-background 150s linear infinite;
     opacity: 0.55;
+    will-change: transform; /* 提示浏览器使用GPU加速 */
   }
 
   .background-container img {

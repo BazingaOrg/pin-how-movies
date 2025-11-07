@@ -1,9 +1,33 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
+import { CornerDownLeft } from "lucide-react";
 import { useTmdbSearch } from "@/hooks/use-tmdb-search";
 import { messages } from "@/lib/messages";
-import { MovieList } from "./movie-list";
+
+// 懒加载MovieList组件，只有在需要显示结果时才加载
+const MovieList = dynamic(() => import("./movie-list").then(mod => ({ default: mod.MovieList })), {
+  loading: () => (
+    <div className="movies-grid">
+      {/* 骨架屏加载状态 */}
+      {Array.from({ length: 3 }, (_, i) => (
+        <div key={i} className="movie-card skeleton-item">
+          <div className="blur_back skeleton" />
+          <div className="movie-info">
+            <div className="movie-title skeleton-text" />
+            <div className="movie-overview skeleton-text short" />
+            <div className="movie-meta">
+              <div className="movie-rating skeleton-text" />
+              <div className="movie-year skeleton-text" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+  ssr: false // 客户端组件，不进行服务端渲染
+});
 
 export function SearchBox() {
   const [query, setQuery] = useState("");
@@ -92,6 +116,25 @@ export function SearchBox() {
 function SearchPlaceholder() {
   const lines = messages.placeholderLines;
 
+  // 渲染带图标的文本
+  const renderTextWithIcon = (text: string) => {
+    if (text.includes('回车')) {
+      const parts = text.split('回车');
+      return (
+        <>
+          {parts[0]}
+          <CornerDownLeft
+            size={32}
+            className="inline-block mx-1 text-white/80"
+            aria-label="回车键"
+          />
+          {parts[1]}
+        </>
+      );
+    }
+    return text;
+  };
+
   return (
     <div className="search-placeholder" role="presentation">
       <div className="search-placeholder__frame">
@@ -102,19 +145,20 @@ function SearchPlaceholder() {
             {lines.map((line, index) => {
               const isFirst = index === 0;
               const isLast = index === lines.length - 1;
-              const text = `${isFirst ? '「' : ''}${line}${isLast ? '」' : ''}`;
+              const processedLine = renderTextWithIcon(line);
 
               return (
                 <span
                   className={`search-placeholder__line search-placeholder__line--indent-${index}`}
                   key={line}
                 >
-                  {text}
+                  {isFirst && '「'}
+                  {processedLine}
+                  {isLast && '」'}
                 </span>
               );
             })}
           </h2>
-          <p className="search-placeholder__hint">{messages.placeholderHint}</p>
         </div>
       </div>
     </div>

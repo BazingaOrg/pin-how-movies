@@ -1,0 +1,118 @@
+/* 动画样式文件 - 包含所有动画效果，优化加载性能 */
+
+/* 搜索框动画 */
+.search-shell .search {
+  transition: all 1s;
+}
+
+.search-shell .search::before {
+  transition: all 0.5s;
+}
+
+.search-shell .search::after {
+  transition: all 0.5s;
+}
+
+.search-shell input {
+  transition: all 1s;
+}
+
+/* 电影卡片动画 */
+.movie-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  will-change: transform, box-shadow;
+}
+
+.movie-card:hover {
+  animation: movie-card-glow 4.2s ease-in-out infinite;
+  will-change: box-shadow;
+}
+
+/* 搜索占位符动画 */
+.search-placeholder__noise {
+  animation: placeholder-static 1.8s steps(6) infinite;
+}
+
+.search-placeholder__vignette {
+  animation: placeholder-vignette 3s ease-in-out infinite;
+}
+
+/* 骨架屏动画 */
+.skeleton-item {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* 骨架屏样式 */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-text {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  height: 1em;
+  margin: 0.5em 0;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+.skeleton-text:last-child {
+  width: 40%;
+}
+
+/* 搜索发光效果 */
+.search-shell input:focus {
+  animation: search-glow 3.2s ease-in-out infinite;
+}
+
+/* 关键帧定义 */
+@keyframes placeholder-static {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+@keyframes placeholder-vignette {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes search-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px 0 rgba(220, 38, 38, 0.5),
+                0 0 10px 0 rgba(220, 38, 38, 0.3),
+                0 0 15px 0 rgba(220, 38, 38, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px 0 rgba(220, 38, 38, 0.8),
+                0 0 20px 0 rgba(220, 38, 38, 0.6),
+                0 0 30px 0 rgba(220, 38, 38, 0.3);
+  }
+}
+
+@keyframes movie-card-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px 0 rgba(59, 130, 246, 0.3),
+                0 0 10px 0 rgba(59, 130, 246, 0.2),
+                0 0 15px 0 rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px 0 rgba(59, 130, 246, 0.6),
+                0 0 20px 0 rgba(59, 130, 246, 0.4),
+                0 0 30px 0 rgba(59, 130, 246, 0.2);
+  }
+}

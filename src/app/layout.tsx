@@ -3,6 +3,8 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import "./globals.css";
 import "@/styles/components.css";
+import "@/styles/animations.css";
+import { AnimationLoader } from "@/components/animation-loader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,7 +37,7 @@ export default function RootLayout({
           <div className="twinkling" />
           <div className="clouds" />
           <Image
-            src="/background/moon2.png"
+            src="/background/moon2.webp"
             alt="Moon illustration"
             width={360}
             height={360}
@@ -45,6 +47,7 @@ export default function RootLayout({
         <div className="relative z-10 flex min-h-screen flex-col">
           {children}
         </div>
+        <AnimationLoader />
       </body>
     </html>
   );

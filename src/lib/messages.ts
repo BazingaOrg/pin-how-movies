@@ -12,5 +12,4 @@ export const messages = {
     '每一次回车，',
     '都是一场新的电影之旅。'
   ],
-  placeholderHint: '按下回车即可搜索',
 } as const;
